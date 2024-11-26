@@ -4,7 +4,9 @@ from canvasapi import Canvas
 from canvasapi.course import Course
 from canvasapi.requester import Requester
 from canvasapi.quiz import Quiz, QuizSubmission
+import os
 import pandas as pd
+import requests
 import time
 from typing import List
 
@@ -155,3 +157,20 @@ def donwload_assignment_submissions(requester: Requester, course_id: int, assign
     submissions = assemble_canvas_file_submissions(submissions)
     for submission in submissions:
         submission.download()
+        
+def upload_file_to_canvas(requester: Requester, file_path: str, canvas_folder_id: int):
+    """Uploads a file to canvas"""
+    # Request upload url
+    file_name = file_path.split("/")[-1]
+    file_size = os.stat(file_path).st_size
+    post_data = {
+        "name": file_name,
+        "size": file_size,
+        "parent_folder_id": canvas_folder_id
+    }
+    post_file_request = requester.request("POST", f"users/self/files", data=post_data)
+
+    # Upload file
+    upload_url = post_file_request.json()["upload_url"]
+    upload_data = post_file_request.json()["upload_params"]
+    return requests.post(upload_url, data=upload_data, files={"file": open(file_path, "rb")})
