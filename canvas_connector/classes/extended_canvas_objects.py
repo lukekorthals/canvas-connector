@@ -14,6 +14,7 @@ class SubmissionDataEntry(CanvasObject):
 class SubmissionHistoryEntry(CanvasObject):
     def __init__(self, requester, attributes):
         self.submission_data = []
+        self.cached_due_date_date = None
         super(SubmissionHistoryEntry, self).__init__(requester, attributes)
         self.assemble_submission_data()
 

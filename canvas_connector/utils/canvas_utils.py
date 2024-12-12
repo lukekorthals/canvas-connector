@@ -127,6 +127,15 @@ def get_all_pages_from_canvas_as_json(requester: Requester, url: str, timeout: i
 def assemble_submissions_with_history(requester: Requester, submissions: list) -> List[SubmissionWithHistory]:
     return [SubmissionWithHistory(requester, submission) for submission in submissions]
 
+def get_assignment_submissions_with_history(course_id: int, assignment_id: int):
+    # Get all submissions
+    request_url = f"courses/{course_id}/assignments/{assignment_id}/submissions?include[]=submission_history&per_page=100"
+    submissions = get_all_pages_from_canvas_as_json(requester, request_url)
+
+    # Initialize convenience classes
+    submissions = assemble_submissions_with_history(requester, submissions)
+    return submissions
+
 def assemble_canvas_file_submissions(submissions: List[SubmissionWithHistory]) -> List[CanvasFileSubmission]:
     canvas_file_submissions = []
     for submission in submissions:
@@ -138,6 +147,27 @@ def whitelist_submissions(submissions: List[SubmissionWithHistory], user_id_whit
 
 def blacklist_submissions(submissions: List[SubmissionWithHistory], user_id_blacklist: List[int]) -> List[SubmissionWithHistory]:
     return [submission for submission in submissions if submission.user_id not in user_id_blacklist]
+
+def get_most_recent_valid_submissions(canvas_file_submissions: List[CanvasFileSubmission]) -> List[CanvasFileSubmission]:
+    """Gets the most recent attempt that was submitted before the deadline"""
+    valid_attempt = 0
+    
+    # Get most recent valid submission
+    for submission in canvas_file_submissions:
+        if submission.late_submission:
+            continue
+        if submission.attempt > valid_attempt:
+            valid_attempt = submission.attempt
+    
+    # If there are only late submissions, return the most recent one
+    if valid_attempt == 0:
+        for submission in canvas_file_submissions:
+            if submission.attempt > valid_attempt:
+                valid_attempt = submission.attempt
+                
+    # Get all valid submissions
+    valid_submissions = [submission for submission in canvas_file_submissions if submission.attempt == valid_attempt]
+    return valid_submissions
 
 def donwload_assignment_submissions(requester: Requester, course_id: int, assignment_id: int, user_id_blacklist: List[int] = None, user_id_whitelist: List[int] = None):
     # Get all submissions

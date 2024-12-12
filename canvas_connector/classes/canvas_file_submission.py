@@ -29,7 +29,10 @@ class CanvasFileSubmission:
         self.attachment_id = attachment_id
         self.path_template = path_template
         self.file_extension = None
-        self.late_submission = submitted_at_date > cached_due_date_date
+        if cached_due_date_date is not None:
+            self.late_submission = submitted_at_date > cached_due_date_date
+        else:
+            self.late_submission = False
     
     def request_file(self) -> Response:
         # Get file
