@@ -127,7 +127,7 @@ def get_all_pages_from_canvas_as_json(requester: Requester, url: str, timeout: i
 def assemble_submissions_with_history(requester: Requester, submissions: list) -> List[SubmissionWithHistory]:
     return [SubmissionWithHistory(requester, submission) for submission in submissions]
 
-def get_assignment_submissions_with_history(course_id: int, assignment_id: int):
+def get_assignment_submissions_with_history(requester: Requester, course_id: int, assignment_id: int):
     # Get all submissions
     request_url = f"courses/{course_id}/assignments/{assignment_id}/submissions?include[]=submission_history&per_page=100"
     submissions = get_all_pages_from_canvas_as_json(requester, request_url)
