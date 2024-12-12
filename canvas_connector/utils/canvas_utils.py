@@ -11,8 +11,8 @@ import time
 from typing import List
 
 # Relative imports
-from classes.canvas_file_submission import CanvasFileSubmission
-from classes.extended_canvas_objects import SubmissionWithHistory
+from ..classes.canvas_file_submission import CanvasFileSubmission
+from ..classes.extended_canvas_objects import SubmissionWithHistory
 
 
 def get_canvas_record_by_id(canvas_object, id: int):
