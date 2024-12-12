@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
@@ -6,7 +6,7 @@ setup(
     url='https://github.com/lukekorthals/canvas-connector',
     author='Luke Korthals',
     author_email='luke-korthals@outlook.de',
-    packages=['canvas_connector'],
+    packages=find_packages(),
     install_requires=['canvasapi','beautifulsoup4', 'pandas'],
     package_data={},
     version='0.1',
