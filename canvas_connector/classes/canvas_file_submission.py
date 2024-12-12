@@ -1,4 +1,5 @@
 from canvasapi.requester import Requester
+from datetime import datetime
 import os
 import re
 import requests
@@ -13,17 +14,22 @@ class CanvasFileSubmission:
                  user_id: int, 
                  assignment_id: int, 
                  attempt: int, 
+                 submitted_at_date: datetime,
+                 cached_due_date_date: datetime,
                  question_id: int, 
                  attachment_id: int, 
                  path_template: str = "submissions/user-{user_id}/assignment-{assignment_id}/use-{user_id}_ass-{assignment_id}_try-{attempt}_que-{question_id}_att-{attachment_id}{file_extension}") -> None:
         self.requester = requester
         self.user_id = user_id
         self.assignment_id = assignment_id
+        self.submitted_at_date = submitted_at_date
+        self.cached_due_date_date = cached_due_date_date
         self.attempt = attempt
         self.question_id = question_id
         self.attachment_id = attachment_id
         self.path_template = path_template
         self.file_extension = None
+        self.late_submission = submitted_at_date > cached_due_date_date
     
     def request_file(self) -> Response:
         # Get file
