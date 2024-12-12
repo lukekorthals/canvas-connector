@@ -49,6 +49,8 @@ class SubmissionWithHistory(Submission):
                             self.user_id,
                             self.assignment_id,
                             history_entry.attempt,
+                            history_entry.submitted_at_date,
+                            history_entry.cached_due_date_date,
                             data_entry.question_id,
                             attachment_id,
                             path_template
@@ -59,6 +61,8 @@ class SubmissionWithHistory(Submission):
                             self.user_id,
                             self.assignment_id,
                             history_entry.attempt,
+                            history_entry.submitted_at_date,
+                            history_entry.cached_due_date_date,
                             data_entry.question_id,
                             attachment_id
                         )
