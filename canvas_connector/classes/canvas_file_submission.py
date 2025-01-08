@@ -58,7 +58,7 @@ class CanvasFileSubmission:
         response = self.request_file()
 
         # Assemble filename
-        out_path = self.assemble_out_path()
+        out_path = self.out_path
 
         # Create directories if necessary
         if "/" in out_path:
