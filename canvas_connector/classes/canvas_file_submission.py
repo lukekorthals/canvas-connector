@@ -18,6 +18,7 @@ class CanvasFileSubmission:
                  cached_due_date_date: datetime,
                  question_id: int, 
                  attachment_id: int, 
+                 out_path: str = None,
                  path_template: str = "submissions/user-{user_id}/assignment-{assignment_id}/use-{user_id}_ass-{assignment_id}_try-{attempt}_que-{question_id}_att-{attachment_id}{file_extension}") -> None:
         self.requester = requester
         self.user_id = user_id
@@ -33,6 +34,9 @@ class CanvasFileSubmission:
             self.late_submission = submitted_at_date > cached_due_date_date
         else:
             self.late_submission = False
+        self.out_path = out_path
+        if out_path is None:
+            self.out_path = self.assemble_out_path()
     
     def request_file(self) -> Response:
         # Get file
