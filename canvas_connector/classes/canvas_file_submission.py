@@ -60,6 +60,7 @@ class CanvasFileSubmission:
         # Assemble filename
         if out_path is None:
             out_path = self.out_path
+        out_path += self.file_extension
 
         # Create directories if necessary
         if "/" in out_path:
