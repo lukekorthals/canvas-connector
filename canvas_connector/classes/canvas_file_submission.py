@@ -52,13 +52,14 @@ class CanvasFileSubmission:
     def assemble_out_path(self) -> str:
         return self.path_template.format(**self.__dict__)
 
-    def download(self):
+    def download(self, out_path: str = None):
         """Downloads the file from canvas."""
         # Get file
         response = self.request_file()
 
         # Assemble filename
-        out_path = self.out_path
+        if out_path is None:
+            out_path = self.out_path
 
         # Create directories if necessary
         if "/" in out_path:
