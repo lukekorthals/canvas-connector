@@ -169,24 +169,28 @@ def get_most_recent_valid_submissions(canvas_file_submissions: List[CanvasFileSu
     valid_submissions = [submission for submission in canvas_file_submissions if submission.attempt == valid_attempt]
     return valid_submissions
 
-def donwload_assignment_submissions(requester: Requester, course_id: int, assignment_id: int, user_id_blacklist: List[int] = None, user_id_whitelist: List[int] = None):
-    # Get all submissions
-    request_url = f"courses/{course_id}/assignments/{assignment_id}/submissions?include[]=submission_history&per_page=100"
-    submissions = get_all_pages_from_canvas_as_json(requester, request_url)
-
-    # Initialize convenience classes
-    submissions = assemble_submissions_with_history(requester, submissions)
-
-    # White and blacklist
-    if user_id_whitelist is not None:
-        submissions = whitelist_submissions(submissions, user_id_whitelist)
-    elif user_id_blacklist is not None: 
-        submissions = blacklist_submissions(submissions, user_id_blacklist)
+def download_assignment_submissions(canvas_requester, course_id, assignment_id, user_whitelist = [], user_blacklist = []):
+    """Download all submissions for a given assignment."""
+    # Get all submissions for the assignment
+    all_submissions = get_assignment_submissions_with_history(canvas_requester,
+                                                              course_id,
+                                                              assignment_id)
     
-    # Download files
-    submissions = assemble_canvas_file_submissions(submissions)
-    for submission in submissions:
-        submission.download()
+    # Whitelist submissions
+    if len(user_whitelist) > 0:
+        all_submissions = whitelist_submissions(all_submissions, user_whitelist)
+    
+    # Blacklist submissions
+    if len(user_blacklist) > 0:
+        all_submissions = blacklist_submissions(all_submissions, user_blacklist)
+    
+    # Assemble file submissions
+    file_submissions = assemble_canvas_file_submissions(all_submissions)
+
+    # Download all file submissions
+    for file_submission in file_submissions:
+        file_submission.download()
+
         
 def upload_file_to_canvas(requester: Requester, file_path: str, canvas_folder_id: int):
     """Uploads a file to canvas"""
