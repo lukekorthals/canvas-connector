@@ -19,7 +19,7 @@ class CanvasFileSubmission:
                  question_id: int, 
                  attachment_id: int, 
                  out_path: str = None,
-                 path_template: str = "submissions/user-{user_id}/assignment-{assignment_id}/use-{user_id}_ass-{assignment_id}_try-{attempt}_que-{question_id}_att-{attachment_id}{file_extension}") -> None:
+                 path_template: str = "submissions/user-{user_id}/assignment-{assignment_id}/use-{user_id}_ass-{assignment_id}_try-{attempt}_que-{question_id}_att-{attachment_id}") -> None:
         self.requester = requester
         self.user_id = user_id
         self.assignment_id = assignment_id
