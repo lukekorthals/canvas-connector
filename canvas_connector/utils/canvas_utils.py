@@ -188,8 +188,11 @@ def download_assignment_submissions(canvas_requester, course_id, assignment_id, 
     file_submissions = assemble_canvas_file_submissions(all_submissions)
 
     # Download all file submissions
+    out_paths = []
     for file_submission in file_submissions:
-        file_submission.download()
+        out_paths.append(file_submission.download())
+    
+    return out_paths
 
         
 def upload_file_to_canvas(requester: Requester, file_path: str, canvas_folder_id: int):

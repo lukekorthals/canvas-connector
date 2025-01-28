@@ -52,7 +52,7 @@ class CanvasFileSubmission:
     def assemble_out_path(self) -> str:
         return self.path_template.format(**self.__dict__)
 
-    def download(self, out_path: str = None):
+    def download(self, out_path: str = None) -> str:
         """Downloads the file from canvas."""
         # Get file
         response = self.request_file()
@@ -70,3 +70,4 @@ class CanvasFileSubmission:
         with open(out_path, "wb") as file:
             shutil.copyfileobj(response.raw, file)
         del response
+        return out_path
