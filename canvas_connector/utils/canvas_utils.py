@@ -136,10 +136,11 @@ def get_assignment_submissions_with_history(requester: Requester, course_id: int
     submissions = assemble_submissions_with_history(requester, submissions)
     return submissions
 
-def assemble_canvas_file_submissions(submissions: List[SubmissionWithHistory]) -> List[CanvasFileSubmission]:
+def assemble_canvas_file_submissions(submissions: List[SubmissionWithHistory],
+                                     path_template: str = None) -> List[CanvasFileSubmission]:
     canvas_file_submissions = []
     for submission in submissions:
-        canvas_file_submissions  += submission.return_all_file_submissions()
+        canvas_file_submissions  += submission.return_all_file_submissions(path_template)
     return canvas_file_submissions
 
 def whitelist_submissions(submissions: List[SubmissionWithHistory], user_id_whitelist: List[int]) -> List[SubmissionWithHistory]:
@@ -169,7 +170,7 @@ def get_most_recent_valid_submissions(canvas_file_submissions: List[CanvasFileSu
     valid_submissions = [submission for submission in canvas_file_submissions if submission.attempt == valid_attempt]
     return valid_submissions
 
-def download_assignment_submissions(canvas_requester, course_id, assignment_id, user_whitelist = [], user_blacklist = []):
+def download_assignment_submissions(canvas_requester, course_id, assignment_id, user_whitelist = [], user_blacklist = [], path_template: str = None):
     """Download all submissions for a given assignment."""
     # Get all submissions for the assignment
     all_submissions = get_assignment_submissions_with_history(canvas_requester,
@@ -185,7 +186,7 @@ def download_assignment_submissions(canvas_requester, course_id, assignment_id, 
         all_submissions = blacklist_submissions(all_submissions, user_blacklist)
     
     # Assemble file submissions
-    file_submissions = assemble_canvas_file_submissions(all_submissions)
+    file_submissions = assemble_canvas_file_submissions(all_submissions, path_template)
 
     # Download all file submissions
     out_paths = []
