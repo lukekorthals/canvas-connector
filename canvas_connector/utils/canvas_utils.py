@@ -52,6 +52,7 @@ def get_users_df(course: Course, enrollment_type: list = None) -> pd.DataFrame:
     for user in users:
         user_data.append({
             "user_id": user.id,
+            "sis_user_id": user.sis_user_id if hasattr(user, 'sis_user_id') else None,
             "user_name": user.name,
             "user_email": user.email
         })
